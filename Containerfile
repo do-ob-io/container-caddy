@@ -22,6 +22,10 @@ USER nonroot
 # Copy Caddy binary from builder stage
 COPY --from=builder /out/caddy /usr/bin/caddy
 
+# Copy default Caddyfile and static site content
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY index.html /usr/share/caddy/index.html
+
 EXPOSE 80 443 443/udp
 
 ENTRYPOINT ["/usr/bin/caddy"]
