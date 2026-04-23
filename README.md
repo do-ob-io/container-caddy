@@ -1,2 +1,3 @@
-# container-caddy
-Caddy webserver container built on top of Wolfie OS
+# Caddy Container Image
+
+Caddy webserver container built on top of Wolfi OS

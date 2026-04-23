@@ -1,4 +1,4 @@
-# hadolint global ignore=DL3007,DL3018
+# hadolint global ignore=DL3007
 FROM cgr.dev/chainguard/wolfi-base:latest AS builder
 
 # Install build dependencies (Go toolchain, git, CA certs)
@@ -6,14 +6,16 @@ RUN apk add --no-cache go git ca-certificates
 
 WORKDIR /src
 
+ARG CADDY_VERSION=v2.11.2
+
 # Clone Caddy source from upstream repository
-RUN git clone --depth 1 https://github.com/caddyserver/caddy.git
+RUN git clone --depth 1 --branch "${CADDY_VERSION}" https://github.com/caddyserver/caddy.git
 
 # Build the Caddy binary
 WORKDIR /src/caddy/cmd/caddy
 RUN go get -u && go mod tidy && CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o /out/caddy
 
-FROM cgr.dev/chainguard/wolfi-base:latest
+FROM cgr.dev/chainguard/static:latest
 
 USER nonroot
 
