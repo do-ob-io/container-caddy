@@ -11,9 +11,11 @@ RUN git clone --depth 1 https://github.com/caddyserver/caddy.git
 
 # Build the Caddy binary
 WORKDIR /src/caddy/cmd/caddy
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o /out/caddy
+RUN go get -u && go mod tidy && CGO_ENABLED=0 go build -ldflags="-s -w" -trimpath -o /out/caddy
 
 FROM cgr.dev/chainguard/wolfi-base:latest
+
+USER nonroot
 
 # Copy Caddy binary from builder stage
 COPY --from=builder /out/caddy /usr/bin/caddy
